@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cfgfile="$HOME/.ponse.cfg"
+
+if type cvlc >/dev/null 2>&1
+then
+	:
+else
+	echo '"cvlc" command dose not exist.' >&2
+	exit
+fi
+
+if [ -f "$cfgfile" -a -r "$cfgfile" ]
+then
+	source "$cfgfile"
+else
+	echo -e '# example\n# a="/path/to/audio/file.wav"' > "$cfgfile"
+	echo 'Configuration file does not exist.' >&2
+	echo "Edit the \"$cfgfile\" file." >&2
+	exit 1
+fi
+
+while read -sn1 key
+do
+	eval cvlc "\$$key" vlc://quit >/dev/null 2>&1
+done
